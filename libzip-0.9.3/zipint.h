@@ -20,7 +20,7 @@
   3. The names of the authors may not be used to endorse or promote
      products derived from this software without specific prior
      written permission.
- 
+
   THIS SOFTWARE IS PROVIDED BY THE AUTHORS ``AS IS'' AND ANY EXPRESS
   OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
   WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -41,7 +41,7 @@
 #endif
 
 #include "zip.h"
-#include "config.h"
+//#include "config.h"
 
 #ifndef HAVE_MKSTEMP
 int _zip_mkstemp(char *);
@@ -143,10 +143,10 @@ struct zip_file {
     off_t fpos;			/* position within zip file (fread/fwrite) */
     unsigned long bytes_left;	/* number of bytes left to read */
     unsigned long cbytes_left;  /* number of bytes of compressed data left */
-    
+
     unsigned long crc;		/* CRC so far */
     unsigned long crc_orig;	/* CRC recorded in archive */
-    
+
     char *buffer;
     z_stream *zstr;
 };
