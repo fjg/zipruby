@@ -9,6 +9,6 @@ Gem::Specification.new do |spec|
   spec.extensions        = 'ext/extconf.rb'
   spec.has_rdoc          = true
   spec.rdoc_options      << '--title' << 'Zip/Ruby - Ruby bindings for libzip.'
-  spec.extra_rdoc_files  = %w(README.txt zipruby.c LICENSE.libzip ChangeLog)
+  spec.extra_rdoc_files  = %w(README.txt LICENSE.libzip ChangeLog)
   spec.rubyforge_project = 'zipruby'
 end
