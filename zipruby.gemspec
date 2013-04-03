@@ -6,7 +6,7 @@ Gem::Specification.new do |spec|
   spec.author            = 'winebarrel'
   spec.email             = 'sgwr_dts@yahoo.co.jp'
   spec.homepage          = 'http://zipruby.rubyforge.org'
-  spec.extensions        = 'ext/extconf.rb'
+  spec.extensions        = 'ext/zipruby/extconf.rb'
   spec.has_rdoc          = true
   spec.rdoc_options      << '--title' << 'Zip/Ruby - Ruby bindings for libzip.'
   spec.extra_rdoc_files  = %w(README.txt LICENSE.libzip ChangeLog)
