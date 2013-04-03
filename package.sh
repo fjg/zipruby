@@ -11,7 +11,8 @@ do
   tr -d '\r' < $i > $i.x && mv $i.x $i
 done
 #cat ext/*.c >> zipruby.c
-cp libzip-${LIBZIP_VERSION}/*.{c,h} ext
+mkdir ext/libzip
+cp libzip-${LIBZIP_VERSION}/*.{c,h} ext/libzip
 rdoc -w 4 -SHN -m README.txt README.txt zipruby.c LICENSE.libzip ChangeLog --title 'Zip/Ruby - Ruby bindings for libzip.'
 mkdir work
 cp -r * work 2> /dev/null
