@@ -4,6 +4,7 @@ LIBZIP_VERSION=0.9.3
 
 rm *.gem *.tar.bz2 2> /dev/null
 rm -rf doc
+rm -f zipruby.c
 echo "/* rdoc source */" > zipruby.c
 for i in ext/*.[ch]
 do
