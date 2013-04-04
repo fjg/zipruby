@@ -14,7 +14,7 @@ void Init_zipruby_zip() {
   rb_define_const(Zip, "CREATE",    INT2NUM(ZIP_CREATE));
   rb_define_const(Zip, "EXCL",      INT2NUM(ZIP_EXCL));
   rb_define_const(Zip, "CHECKCONS", INT2NUM(ZIP_CHECKCONS));
-  rb_define_const(Zip, "TRUNC",     INT2NUM(ZIP_TRUNC));
+  rb_define_const(Zip, "TRUNC",     INT2NUM(ZIP_TRUNCATE));
 
   rb_define_const(Zip, "FL_NOCASE",     INT2NUM(ZIP_FL_NOCASE));
   rb_define_const(Zip, "FL_NODIR",      INT2NUM(ZIP_FL_NODIR));

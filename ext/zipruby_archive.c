@@ -173,7 +173,7 @@ static VALUE zipruby_archive_s_open(int argc, VALUE *argv, VALUE self) {
     rb_raise(Error, "Open archive failed - %s: %s", RSTRING_PTR(path), errstr);
   }
 
-  p_archive->archive->comp_level = i_comp_level;
+  //  p_archive->archive->comp_level = i_comp_level;
   p_archive->path = path;
   p_archive->flags = i_flags;
   p_archive->sources = rb_ary_new();
@@ -234,7 +234,7 @@ static VALUE zipruby_archive_s_open_buffer(int argc, VALUE *argv, VALUE self) {
       buffer_is_temporary = 1;
     }
 
-    i_flags = (i_flags | ZIP_TRUNC);
+    i_flags = (i_flags | ZIP_TRUNCATE);
   } else if (TYPE(buffer) == T_STRING) {
     data = RSTRING_PTR(buffer);
     len = RSTRING_LEN(buffer);
@@ -258,7 +258,7 @@ static VALUE zipruby_archive_s_open_buffer(int argc, VALUE *argv, VALUE self) {
     rb_raise(Error, "Open archive failed: %s", errstr);
   }
 
-  p_archive->archive->comp_level = i_comp_level;
+  //  p_archive->archive->comp_level = i_comp_level;
   p_archive->path = rb_str_new2(p_archive->tmpfilnam);
   p_archive->flags = i_flags;
   p_archive->buffer = buffer;
@@ -342,7 +342,8 @@ static VALUE zipruby_archive_s_encrypt(VALUE self, VALUE path, VALUE password) {
 /* */
 static VALUE zipruby_archive_close(VALUE self) {
   struct zipruby_archive *p_archive;
-  int changed, survivors;
+  int changed;
+  zip_uint64_t survivors;
 
   if (!zipruby_archive_is_open(self)) {
     return Qfalse;
@@ -404,7 +405,7 @@ static VALUE zipruby_archive_get_name(int argc, VALUE *argv, VALUE self) {
   Check_Archive(p_archive);
 
   if ((name = zip_get_name(p_archive->archive, NUM2INT(index), i_flags)) == NULL) {
-    rb_raise(Error, "Get name failed at %d: %s", index, zip_strerror(p_archive->archive));
+    rb_raise(Error, "Get name failed at %d: %s", NUM2INT(index), zip_strerror(p_archive->archive));
   }
 
   return (name != NULL) ? rb_str_new2(name) : Qnil;
@@ -708,7 +709,7 @@ static VALUE zipruby_archive_add_io(int argc, VALUE *argv, VALUE self) {
     mtime = rb_funcall(rb_cTime, rb_intern("now"), 0);
   }
 
-  Data_Get_Struct(self, struct zipruby_archive, p_archive); 
+  Data_Get_Struct(self, struct zipruby_archive, p_archive);
   Check_Archive(p_archive);
 
   if ((z = malloc(sizeof(struct read_io))) == NULL) {
@@ -771,7 +772,7 @@ static VALUE zipruby_archive_replace_io(int argc, VALUE *argv, VALUE self) {
     rb_raise(Error, "Replace io failed - %s: Archive does not contain a file", RSTRING_PTR(index));
   }
 
-  Data_Get_Struct(self, struct zipruby_archive, p_archive); 
+  Data_Get_Struct(self, struct zipruby_archive, p_archive);
   Check_Archive(p_archive);
 
   if ((z = malloc(sizeof(struct read_io))) == NULL) {
@@ -844,7 +845,7 @@ static VALUE zipruby_archive_add_function(int argc, VALUE *argv, VALUE self) {
     rb_raise(rb_eTypeError, "wrong argument type %s (expected Time)", rb_class2name(CLASS_OF(mtime)));
   }
 
-  Data_Get_Struct(self, struct zipruby_archive, p_archive); 
+  Data_Get_Struct(self, struct zipruby_archive, p_archive);
   Check_Archive(p_archive);
 
   if ((z = malloc(sizeof(struct read_proc))) == NULL) {
@@ -897,7 +898,7 @@ static VALUE zipruby_archive_replace_function(int argc, VALUE *argv, VALUE self)
     i_flags = NUM2INT(flags);
   }
 
-  Data_Get_Struct(self, struct zipruby_archive, p_archive); 
+  Data_Get_Struct(self, struct zipruby_archive, p_archive);
   Check_Archive(p_archive);
 
   if (FIXNUM_P(index)) {
@@ -1294,7 +1295,8 @@ static VALUE zipruby_archive_each(VALUE self) {
 /* */
 static VALUE zipruby_archive_commit(VALUE self) {
   struct zipruby_archive *p_archive;
-  int changed, survivors;
+  int changed;
+  zip_uint64_t survivors;
   int errorp;
 
   Data_Get_Struct(self, struct zipruby_archive, p_archive);
@@ -1341,7 +1343,8 @@ static VALUE zipruby_archive_decrypt(VALUE self, VALUE password) {
   VALUE retval;
   struct zipruby_archive *p_archive;
   long pwdlen;
-  int changed, survivors;
+  int changed;
+  zip_uint64_t survivors;
   int errorp;
 
   Check_Type(password, T_STRING);
@@ -1387,7 +1390,8 @@ static VALUE zipruby_archive_encrypt(VALUE self, VALUE password) {
   VALUE retval;
   struct zipruby_archive *p_archive;
   long pwdlen;
-  int changed, survivors;
+  int changed;
+  zip_uint64_t survivors;
   int errorp;
 
   Check_Type(password, T_STRING);

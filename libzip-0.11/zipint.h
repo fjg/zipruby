@@ -50,9 +50,7 @@
 #endif
 
 #include "zip.h"
-#ifndef _WIN32
-//#include "config.h"
-#endif
+#include "config.h"
 
 #ifdef HAVE_MOVEFILEEXA
 #include <windows.h>

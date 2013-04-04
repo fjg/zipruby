@@ -10,6 +10,7 @@ struct zipruby_file {
   struct zip_file *file;
   VALUE v_sb;
   struct zip_stat *sb;
+  struct zip_cdir *cdir;
 };
 
 void Init_zipruby_file();

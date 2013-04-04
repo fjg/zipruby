@@ -175,9 +175,9 @@ static VALUE zipruby_file_read(int argc, VALUE *argv, VALUE self) {
   Check_File(p_file);
   zip_stat_init(&sb);
 
-  if (p_file->archive->cdir->entry[0].bitflags & ZIP_GPBF_ENCRYPTED) {
-    rb_raise(Error, "Read file failed: File encrypted");
-  }
+  //if (p_file->archive->cdir->entry[0].bitflags & ZIP_GPBF_ENCRYPTED) {
+  //  rb_raise(Error, "Read file failed: File encrypted");
+  //}
 
   if (zip_stat_index(p_file->archive, p_file->sb->index, 0, &sb)) {
     rb_raise(Error, "Read file failed: %s", zip_strerror(p_file->archive));

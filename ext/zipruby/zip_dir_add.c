@@ -1,6 +1,6 @@
 /*
-  zip_entry_new.c -- create and init struct zip_entry
-  Copyright (C) 1999-2007 Dieter Baron and Thomas Klausner
+  zip_dir_add.c -- add directory
+  Copyright (C) 1999-2012 Dieter Baron and Thomas Klausner
 
   This file is part of libzip, a library to manipulate ZIP archives.
   The authors can be contacted at <libzip@nih.at>
@@ -34,45 +34,55 @@
 
 
 #include <stdlib.h>
+#include <string.h>
 
 #include "zipint.h"
 
 
 
-struct zip_entry *
-_zip_entry_new(struct zip *za)
+/* NOTE: Signed due to -1 on error.  See zip_add.c for more details. */
+
+ZIP_EXTERN zip_int64_t
+zip_dir_add(struct zip *za, const char *name, zip_flags_t flags)
 {
-    struct zip_entry *ze;
-    if (!za) {
-	ze = (struct zip_entry *)malloc(sizeof(struct zip_entry));
-	if (!ze) {
+    size_t len;
+    zip_int64_t ret;
+    char *s;
+    struct zip_source *source;
+
+    if (ZIP_IS_RDONLY(za)) {
+	_zip_error_set(&za->error, ZIP_ER_RDONLY, 0);
+	return -1;
+    }
+
+    if (name == NULL) {
+	_zip_error_set(&za->error, ZIP_ER_INVAL, 0);
+	return -1;
+    }
+
+    s = NULL;
+    len = strlen(name);
+
+    if (name[len-1] != '/') {
+	if ((s=(char *)malloc(len+2)) == NULL) {
 	    _zip_error_set(&za->error, ZIP_ER_MEMORY, 0);
-	    return NULL;
+	    return -1;
 	}
-    }
-    else {
-	if (za->nentry >= za->nentry_alloc-1) {
-	    za->nentry_alloc += 16;
-	    za->entry = (struct zip_entry *)realloc(za->entry,
-						    sizeof(struct zip_entry)
-						    * za->nentry_alloc);
-	    if (!za->entry) {
-		_zip_error_set(&za->error, ZIP_ER_MEMORY, 0);
-		return NULL;
-	    }
-	}
-	ze = za->entry+za->nentry;
+	strcpy(s, name);
+	s[len] = '/';
+	s[len+1] = '\0';
     }
 
-    ze->state = ZIP_ST_UNCHANGED;
+    if ((source=zip_source_buffer(za, NULL, 0, 0)) == NULL) {
+	free(s);
+	return -1;
+    }
+	
+    ret = _zip_file_replace(za, ZIP_UINT64_MAX, s ? s : name, source, flags);
 
-    ze->ch_filename = NULL;
-    ze->ch_comment = NULL;
-    ze->ch_comment_len = -1;
-    ze->source = NULL;
+    free(s);
+    if (ret < 0)
+	zip_source_free(source);
 
-    if (za)
-	za->nentry++;
-
-    return ze;
+    return ret;
 }
