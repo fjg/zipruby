@@ -9,7 +9,7 @@ static VALUE proc_call(VALUE proc) {
   return rb_funcall(proc, rb_intern("call"), 0);
 }
 
-static ssize_t read_proc(void *state, void *data, size_t len, enum zip_source_cmd cmd) {
+static zip_int64_t read_proc(void *state, void *data, zip_uint64_t len, enum zip_source_cmd cmd) {
   struct read_proc *z;
   VALUE src;
   char *buf;

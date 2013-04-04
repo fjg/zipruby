@@ -11,7 +11,7 @@ static VALUE io_read(VALUE io) {
   return rb_funcall(io, rb_intern("read"), 1, INT2FIX(IO_READ_BUFSIZE));
 }
 
-static ssize_t read_io(void *state, void *data, size_t len, enum zip_source_cmd cmd) {
+static zip_int64_t read_io(void *state, void *data, zip_uint64_t len, enum zip_source_cmd cmd) {
   struct read_io *z;
   VALUE src;
   char *buf;
