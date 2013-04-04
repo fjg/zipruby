@@ -4,12 +4,11 @@ LIBZIP_VERSION=0.9.3
 
 rm *.gem *.tar.bz2 2> /dev/null
 rm -rf doc
-rm -f zipruby.c
-for i in ext/zipruby/*.[ch]
+for i in ext/*.[ch]
 do
   tr -d '\r' < $i > $i.x && mv $i.x $i
 done
-#cat ext/*.c >> zipruby.c
+cp ext/*.[ch] ext/zipruby/
 cp libzip-${LIBZIP_VERSION}/*.{c,h} ext/zipruby/
 rdoc -w 4 -SHN -m README.txt README.txt zipruby.c LICENSE.libzip ChangeLog --title 'Zip/Ruby - Ruby bindings for libzip.'
 mkdir work
