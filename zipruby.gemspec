@@ -1,6 +1,6 @@
 Gem::Specification.new do |spec|
   spec.name              = 'zipruby'
-  spec.version           = '0.3.7'
+  spec.version           = '0.3.8'
   spec.summary           = 'Ruby bindings for libzip.'
   spec.files             = Dir.glob('ext/zipruby/*.{c,h,rb}') + %w(README.txt LICENSE.libzip ChangeLog)
   spec.author            = 'winebarrel'

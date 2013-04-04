@@ -1,6 +1,6 @@
 #!/bin/bash
-VERSION=0.3.7
-LIBZIP_VERSION=0.9.3 # 0.9.3 - 0.11
+VERSION=0.3.8
+LIBZIP_VERSION=0.11 # 0.9.3 (ok) - 0.10 (tbt) - 0.11 (not tested)
 
 rm *.gem *.tar.bz2 2> /dev/null
 rm -rf doc
