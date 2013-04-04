@@ -1,6 +1,6 @@
 #!/bin/bash
 VERSION=0.3.7
-LIBZIP_VERSION=0.9.3
+LIBZIP_VERSION=0.9.3 # 0.9.3 - 0.11
 
 rm *.gem *.tar.bz2 2> /dev/null
 rm -rf doc

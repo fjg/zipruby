@@ -1,6 +1,6 @@
 /*
-  zip_fopen_encrypted.c -- open file for reading with password
-  Copyright (C) 1999-2009 Dieter Baron and Thomas Klausner
+  zip_entry_free.c -- free struct zip_entry
+  Copyright (C) 1999-2007 Dieter Baron and Thomas Klausner
 
   This file is part of libzip, a library to manipulate ZIP archives.
   The authors can be contacted at <libzip@nih.at>
@@ -33,17 +33,20 @@
 
 
 
+#include <stdlib.h>
+
 #include "zipint.h"
 
 
 
-ZIP_EXTERN struct zip_file *
-zip_fopen_encrypted(struct zip *za, const char *fname, zip_flags_t flags, const char *password)
+void
+_zip_entry_free(struct zip_entry *ze)
 {
-    zip_int64_t idx;
+    free(ze->ch_filename);
+    ze->ch_filename = NULL;
+    free(ze->ch_comment);
+    ze->ch_comment = NULL;
+    ze->ch_comment_len = -1;
 
-    if ((idx=zip_name_locate(za, fname, flags)) < 0)
-	return NULL;
-
-    return zip_fopen_index_encrypted(za, (zip_uint64_t)idx, flags, password);
+    _zip_unchange_data(ze);
 }

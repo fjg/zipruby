@@ -1,6 +1,6 @@
 /*
   zip_name_locate.c -- get index by name
-  Copyright (C) 1999-2011 Dieter Baron and Thomas Klausner
+  Copyright (C) 1999-2007 Dieter Baron and Thomas Klausner
 
   This file is part of libzip, a library to manipulate ZIP archives.
   The authors can be contacted at <libzip@nih.at>
@@ -34,43 +34,42 @@
 
 
 #include <string.h>
-#ifdef HAVE_STRINGS_H
-#include <strings.h>
-#endif
 
 #include "zipint.h"
 
 
 
-ZIP_EXTERN zip_int64_t
-zip_name_locate(struct zip *za, const char *fname, zip_flags_t flags)
+ZIP_EXTERN int
+zip_name_locate(struct zip *za, const char *fname, int flags)
 {
     return _zip_name_locate(za, fname, flags, &za->error);
 }
 
 
 
-zip_int64_t
-_zip_name_locate(struct zip *za, const char *fname, zip_flags_t flags, struct zip_error *error)
+int
+_zip_name_locate(struct zip *za, const char *fname, int flags,
+		 struct zip_error *error)
 {
     int (*cmp)(const char *, const char *);
     const char *fn, *p;
-    zip_uint64_t i;
-
-    if (za == NULL)
-	return -1;
+    int i, n;
 
     if (fname == NULL) {
 	_zip_error_set(error, ZIP_ER_INVAL, 0);
 	return -1;
     }
-
+    
     cmp = (flags & ZIP_FL_NOCASE) ? strcasecmp : strcmp;
 
-    for (i=0; i<za->nentry; i++) {
-	fn = _zip_get_name(za, i, flags, error);
+    n = (flags & ZIP_FL_UNCHANGED) ? za->cdir->nentry : za->nentry;
+    for (i=0; i<n; i++) {
+	if (flags & ZIP_FL_UNCHANGED)
+	    fn = za->cdir->entry[i].filename;
+	else
+	    fn = _zip_get_name(za, i, flags, error);
 
-	/* newly added (partially filled) entry or error */
+	/* newly added (partially filled) entry */
 	if (fn == NULL)
 	    continue;
 	
@@ -80,10 +79,8 @@ _zip_name_locate(struct zip *za, const char *fname, zip_flags_t flags, struct zi
 		fn = p+1;
 	}
 
-	if (cmp(fname, fn) == 0) {
-	    _zip_error_clear(error);
-	    return (zip_int64_t)i;
-	}
+	if (cmp(fname, fn) == 0)
+	    return i;
     }
 
     _zip_error_set(error, ZIP_ER_NOENT, 0);

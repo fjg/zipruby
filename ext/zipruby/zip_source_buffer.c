@@ -1,6 +1,6 @@
 /*
   zip_source_buffer.c -- create zip data source from buffer
-  Copyright (C) 1999-2009 Dieter Baron and Thomas Klausner
+  Copyright (C) 1999-2007 Dieter Baron and Thomas Klausner
 
   This file is part of libzip, a library to manipulate ZIP archives.
   The authors can be contacted at <libzip@nih.at>
@@ -44,12 +44,13 @@ struct read_data {
     int freep;
 };
 
-static zip_int64_t read_data(void *, void *, zip_uint64_t, enum zip_source_cmd);
+static ssize_t read_data(void *state, void *data, size_t len,
+			 enum zip_source_cmd cmd);
 
 
 
 ZIP_EXTERN struct zip_source *
-zip_source_buffer(struct zip *za, const void *data, zip_uint64_t len, int freep)
+zip_source_buffer(struct zip *za, const void *data, off_t len, int freep)
 {
     struct read_data *f;
     struct zip_source *zs;
@@ -57,7 +58,7 @@ zip_source_buffer(struct zip *za, const void *data, zip_uint64_t len, int freep)
     if (za == NULL)
 	return NULL;
 
-    if (data == NULL && len > 0) {
+    if (len < 0 || (data == NULL && len > 0)) {
 	_zip_error_set(&za->error, ZIP_ER_INVAL, 0);
 	return NULL;
     }
@@ -82,12 +83,12 @@ zip_source_buffer(struct zip *za, const void *data, zip_uint64_t len, int freep)
 
 
 
-static zip_int64_t
-read_data(void *state, void *data, zip_uint64_t len, enum zip_source_cmd cmd)
+static ssize_t
+read_data(void *state, void *data, size_t len, enum zip_source_cmd cmd)
 {
     struct read_data *z;
     char *buf;
-    zip_uint64_t n;
+    size_t n;
 
     z = (struct read_data *)state;
     buf = (char *)data;
@@ -98,7 +99,7 @@ read_data(void *state, void *data, zip_uint64_t len, enum zip_source_cmd cmd)
 	return 0;
 	
     case ZIP_SOURCE_READ:
-	n = (zip_uint64_t)(z->end - z->buf);
+	n = z->end - z->buf;
 	if (n > len)
 	    n = len;
 
@@ -107,7 +108,7 @@ read_data(void *state, void *data, zip_uint64_t len, enum zip_source_cmd cmd)
 	    z->buf += n;
 	}
 
-	return (zip_int64_t)n;
+	return n;
 	
     case ZIP_SOURCE_CLOSE:
 	return 0;
@@ -123,12 +124,7 @@ read_data(void *state, void *data, zip_uint64_t len, enum zip_source_cmd cmd)
 
 	    zip_stat_init(st);
 	    st->mtime = z->mtime;
-	    st->size = (zip_uint64_t)(z->end - z->data);
-	    st->comp_size = st->size;
-	    st->comp_method = ZIP_CM_STORE;
-	    st->encryption_method = ZIP_EM_NONE;
-	    st->valid = ZIP_STAT_MTIME|ZIP_STAT_SIZE|ZIP_STAT_COMP_SIZE
-		|ZIP_STAT_COMP_METHOD|ZIP_STAT_ENCRYPTION_METHOD;
+	    st->size = z->end - z->data;
 	    
 	    return sizeof(*st);
 	}
