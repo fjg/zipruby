@@ -1,28 +1,27 @@
-= Zip/Ruby
+# Zip/Ruby
 
-Copyright (c) 2008-2010 SUGAWARA Genki <sgwr_dts@yahoo.co.jp>
+Copyright (c) 2008-2010 [SUGAWARA Genki](mailto:sgwr_dts@yahoo.co.jp)
 
-== Description
+## Description
 
 Ruby bindings for libzip.
 
 libzip is a C library for reading, creating, and modifying zip archives.
 
-== Source Code
+## Source Code
 
 https://bitbucket.org/winebarrel/zipruby
 
-== Install
+## Install
 
 gem install zipruby
 
-== Download
+## Download
 
 https://rubyforge.org/frs/?group_id=6124
 
-== Example
-=== reading zip archive
-
+## Reading zip archive
+```ruby
     require 'zipruby'
     
     Zip::Archive.open('filename.zip') do |ar|
@@ -63,9 +62,10 @@ https://rubyforge.org/frs/?group_id=6124
         # end
       end
     end
+```
 
-=== creating zip archive
-
+## Creating zip archive
+```ruby
     require 'zipruby'
     
     bar_txt =  open('bar.txt')
@@ -109,9 +109,10 @@ https://rubyforge.org/frs/?group_id=6124
         source.shift # end of stream is nil
       end
     end
+```
 
-=== modifying zip archive
-
+## Modifying zip archive
+```ruby
     require 'zipruby'
     
     bar_txt = open('bar.txt')
@@ -154,9 +155,10 @@ https://rubyforge.org/frs/?group_id=6124
         ar1.update(ar2)
       end
     end
+```
 
-=== encrypt/decrypt zip archive
-
+## Encrypt/decrypt zip archive
+```ruby
     require 'zipruby'
     
     # encrypt
@@ -172,9 +174,10 @@ https://rubyforge.org/frs/?group_id=6124
     # Zip::Archive.open('filename.zip') do |ar|
     #   ar.decrypt('password')
     # end
+```
 
-=== modifying zip data in memory
-
+## Modifying zip data in memory
+```ruby
     require 'zipruby'
     
     $stdout.binmode
@@ -213,9 +216,10 @@ https://rubyforge.org/frs/?group_id=6124
         print chunk
       end
     end
+```
 
-=== adding directory recursively
-
+## Adding directory recursively
+```ruby
     require 'zipruby'
     
     Zip::Archive.open('filename.zip', Zip::CREATE) do |ar|
@@ -229,9 +233,10 @@ https://rubyforge.org/frs/?group_id=6124
         end
       end
     end
+```
 
-=== extract all files
-
+## Extract all files
+```ruby
     require 'zipruby'
     require 'fileutils'
     
@@ -249,22 +254,23 @@ https://rubyforge.org/frs/?group_id=6124
         end
       end
     end
+```
 
-== License
+## License
 
-    Copyright (c) 2008-2010 SUGAWARA Genki <sgwr_dts@yahoo.co.jp>
+    Copyright (c) 2008-2010 SUGAWARA Genki (mailto:sgwr_dts@yahoo.co.jp)
     All rights reserved.
     
     Redistribution and use in source and binary forms, with or without modification,
     are permitted provided that the following conditions are met:
     
-        * Redistributions of source code must retain the above copyright notice, 
-          this list of conditions and the following disclaimer.
-        * Redistributions in binary form must reproduce the above copyright notice, 
-          this list of conditions and the following disclaimer in the documentation 
-          and/or other materials provided with the distribution.
-        * The names of its contributors may not be used to endorse or promote products 
-           derived from this software without specific prior written permission.
+    * Redistributions of source code must retain the above copyright notice, 
+      this list of conditions and the following disclaimer.
+    * Redistributions in binary form must reproduce the above copyright notice, 
+      this list of conditions and the following disclaimer in the documentation 
+      and/or other materials provided with the distribution.
+    * The names of its contributors may not be used to endorse or promote products 
+       derived from this software without specific prior written permission.
     
     THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
     ANY EXPRESS OR IMPLIED WARRANTIES,
@@ -278,7 +284,7 @@ https://rubyforge.org/frs/?group_id=6124
     OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH 
     DAMAGE.
 
-=== libzip
+## libzip
 
 Zip/Ruby contains libzip.
 
@@ -289,5 +295,5 @@ libzip is a C library for reading, creating, and modifying zip archives.
   * ftp.nih.at /pub/nih/libzip
 
 * authors:
-  * Dieter Baron <dillo@giga.or.at>
-  * Thomas Klausner <tk@giga.or.at>
+  * [Dieter Baron](mailto:dillo@giga.or.at)
+  * [Thomas Klausner](mailto:tk@giga.or.at)
